@@ -13,9 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float defaultScoreTime = 1f;
     [SerializeField] private float badFieldScoreTime = .5f;
     [SerializeField] private float goodFieldScoreTime = .5f;
-    [SerializeField] private int maxFields = 3;
-
-
+    [SerializeField] private int maxFields = 2;
 
     [SerializeField] private GameObject badFieldObject;
     [SerializeField] private GameObject goodFieldObject;
@@ -25,6 +23,7 @@ public class GameManager : MonoBehaviour
     private bool _playing = true;
     private Vector2 _maxBounds;
     private Vector2 _minBounds;
+    public bool spawning = true;
     [NonSerialized] public readonly List<GameObject> CurrentFields = new ();
 
     private static GameManager _instance;
@@ -60,10 +59,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(1f);
         
-        while (maxFields > CurrentFields.Count)
+        while (spawning)
         {
+            if (maxFields <= CurrentFields.Count) yield return new WaitForSecondsRealtime(2f);
             CurrentFields.Add(Instantiate(badFieldObject, RandomPosition(), Quaternion.identity));
-            yield return 0;
+            yield return new WaitForSecondsRealtime(1f);
         }
     }
     
