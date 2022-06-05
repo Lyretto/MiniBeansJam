@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 mousePosition;
     public float moveSpeed = 0.1f;
     private Animator _animator;
+    public List<Field> touchingFields;
 
     private static PlayerMovement _instance;
     public static PlayerMovement Instance
@@ -36,8 +37,10 @@ public class PlayerMovement : MonoBehaviour
             mousePosition = Camera.main!.ScreenToWorldPoint(mousePosition);
             
             _animator.SetFloat("Speed", Vector3.Distance(transform.position,mousePosition));
+
+            var modifier = touchingFields.Count <= 0 ? 1f : .5f;
             
-            transform.position = Vector2.Lerp(transform.position, mousePosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector2.Lerp(transform.position, mousePosition,  modifier * moveSpeed * Time.deltaTime);
                 
             // mousePosition.Normalize();
             // var rotZ = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
