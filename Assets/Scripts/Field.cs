@@ -8,29 +8,35 @@ public class Field : MonoBehaviour
     [SerializeField] private FieldState fieldState = FieldState.Neutral;
     [SerializeField] private float maxSize = 5f;
     [SerializeField] private float growTime = 1f;
+    [SerializeField] private float dyingTime = 1f;
     
     private float _sizeModificator;
     private bool _hasPlayer;
     public List<GameObject> touchingFields;
 
-    private void Update()
+    private void Start()
     {
         StartCoroutine(Grow());
     }
 
     private IEnumerator Grow()
     {
-        var counter = 0f;
+        var elapsedTime = 0f;
         var maxScale = new Vector3(maxSize, maxSize, maxSize);
-        while(touchingFields.Count <= 0 && counter < 1)
+        var startScale = transform.localScale;
+        while(touchingFields.Count <= 0 && elapsedTime < growTime)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, maxScale, counter);
-            counter += Time.deltaTime/growTime;
-            
-            Debug.Log(counter);
-            yield return new WaitForSeconds(0.2f);
+            transform.localScale = Vector3.Lerp(startScale, maxScale, elapsedTime/growTime);
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
         
+        StartCoroutine(Dying());
+    }
+
+    private IEnumerator Dying()
+    {
+        yield return new WaitForSecondsRealtime(dyingTime);
         if(_hasPlayer)  GameManager.Instance.ChangeState();
         touchingFields.ForEach(field => field.GetComponent<Field>().touchingFields.Remove(gameObject));
         GameManager.Instance.CurrentFields.Remove(gameObject);
