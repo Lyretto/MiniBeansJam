@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Field : MonoBehaviour
 {
@@ -17,6 +15,7 @@ public class Field : MonoBehaviour
     public List<GameObject> touchingFields;
     private SpriteRenderer _spriteRenderer;
     private Sprite _defaultSprite;
+    private CircleCollider2D _collider;
     [SerializeField] private Sprite waitingSprite;
 
     private void Awake()
@@ -48,9 +47,11 @@ public class Field : MonoBehaviour
 
     private IEnumerator SpawnSignaling()
     {
+        _collider.enabled = false;
         _spriteRenderer.sprite = waitingSprite;
         yield return new WaitForSecondsRealtime(dyingTime);
         _spriteRenderer.sprite = _defaultSprite;
+        _collider.enabled = true;
     }
 
     private IEnumerator Dying()
@@ -59,6 +60,7 @@ public class Field : MonoBehaviour
         GameManager.Instance.CurrentFields.Remove(gameObject);
         if(_hasPlayer)  GameManager.Instance.ChangeState();
         touchingFields.ForEach(field => field.GetComponent<Field>().touchingFields.Remove(gameObject));
+        PlayerMovement.Instance.touchingFields.Remove(this);
         Destroy(gameObject);
     }
     
@@ -68,6 +70,8 @@ public class Field : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             if(fieldState == FieldState.Death) StartCoroutine(GameManager.Instance.Endgame());
+            
+            PlayerMovement.Instance.touchingFields.Add(this);
             
             _hasPlayer = true;
             GameManager.Instance.ChangeState(fieldState);
@@ -79,6 +83,7 @@ public class Field : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            PlayerMovement.Instance.touchingFields.Remove(this);
             _hasPlayer = false;
             GameManager.Instance.ChangeState();
         }

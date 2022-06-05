@@ -15,6 +15,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BadField
       objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589235, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589238, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Color.b
       value: 0.30838373
