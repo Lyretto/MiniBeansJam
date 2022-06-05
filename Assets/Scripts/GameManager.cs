@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
         
         _maxBounds = new Vector2(horzExtent / 2f, vertExtent / 2 );
         _minBounds = new Vector2(-horzExtent / 2f, -vertExtent / 2);
+
+        yield return new WaitForSecondsRealtime(1f);
         
         while (maxFields > CurrentFields.Count)
         {

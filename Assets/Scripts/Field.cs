@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Field : MonoBehaviour
 {
     [SerializeField] private FieldState fieldState = FieldState.Neutral;
     [SerializeField] private float maxSize = 5f;
+    [SerializeField] private float growTime = 1f;
     
     private float _sizeModificator;
     private bool _hasPlayer;
@@ -18,11 +20,15 @@ public class Field : MonoBehaviour
 
     private IEnumerator Grow()
     {
-        while(!(_sizeModificator > maxSize))
+        var counter = 0f;
+        var maxScale = new Vector3(maxSize, maxSize, maxSize);
+        while(touchingFields.Count <= 0 && counter < 1)
         {
-            transform.localScale *= _sizeModificator * Time.deltaTime;
-            _sizeModificator += 1f;
-            yield return 0;
+            transform.localScale = Vector3.Lerp(transform.localScale, maxScale, counter);
+            counter += Time.deltaTime/growTime;
+            
+            Debug.Log(counter);
+            yield return new WaitForSeconds(0.2f);
         }
         
         if(_hasPlayer)  GameManager.Instance.ChangeState();

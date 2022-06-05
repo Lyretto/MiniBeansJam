@@ -115,3 +115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldState: 1
+  maxSize: 5
+  growTime: 144.58
+  touchingFields: []
