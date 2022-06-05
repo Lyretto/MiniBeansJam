@@ -14,9 +14,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float badFieldScoreTime = .5f;
     [SerializeField] private float goodFieldScoreTime = .5f;
     [SerializeField] private int maxFields = 2;
+    
+    
 
     [SerializeField] private List<GameObject> fieldObjects;
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text endScoreText;
+    [SerializeField] private GameObject endUI;
+
     
     private int _score;
     private FieldState _fieldState = FieldState.Neutral;
@@ -44,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        endUI.SetActive(false);
         Playing = true;
         CurrentFields = new List<GameObject>();
         _score = 0;
@@ -137,7 +143,8 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSecondsRealtime(1f);
         
-        // open UI
+        endUI.SetActive(true);
+        endScoreText.text = _score.ToString();
     }   
 }
 
