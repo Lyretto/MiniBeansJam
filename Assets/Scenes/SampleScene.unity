@@ -545,9 +545,12 @@ MonoBehaviour:
   badFieldScoreTime: 0.5
   goodFieldScoreTime: 0.5
   maxFields: 3
-  badFieldObject: {fileID: 8570908579464122163, guid: 657c39fe61f487b4fa65c31b7052dd0d, type: 3}
-  goodFieldObject: {fileID: 1060586382588595869, guid: 615d09f9d4a27bd48aa1c563fd46b439, type: 3}
+  fieldObjects:
+  - {fileID: 8570908579464122163, guid: 657c39fe61f487b4fa65c31b7052dd0d, type: 3}
+  - {fileID: 1060586382588595869, guid: 615d09f9d4a27bd48aa1c563fd46b439, type: 3}
+  - {fileID: 6944666005104070579, guid: a7ec7f2f50b194a40a5520b2a2f6e16c, type: 3}
   scoreText: {fileID: 322495721}
+  spawning: 1
 --- !u!4 &1818842459
 Transform:
   m_ObjectHideFlags: 0
