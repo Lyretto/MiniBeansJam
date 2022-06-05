@@ -15,16 +15,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float goodFieldScoreTime = .5f;
     [SerializeField] private int maxFields = 2;
 
-    [SerializeField] private GameObject badFieldObject;
-    [SerializeField] private GameObject goodFieldObject;
+    [SerializeField] private List<GameObject> fieldObjects;
     [SerializeField] private TMP_Text scoreText;
+    
     private int _score;
     private FieldState _fieldState = FieldState.Neutral;
-    private bool _playing = true;
+    [NonSerialized] public bool Playing = true;
     private Vector2 _maxBounds;
     private Vector2 _minBounds;
     public bool spawning = true;
-    [NonSerialized] public readonly List<GameObject> CurrentFields = new ();
+    [NonSerialized] public List<GameObject> CurrentFields = new ();
 
     private static GameManager _instance;
     public static GameManager Instance
@@ -39,10 +39,20 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        Playing = true;
+        CurrentFields = new List<GameObject>();
+        _score = 0;
+        scoreText.text = "Score: 0";
+        Time.timeScale = 1;
         StartCoroutine(GatherScore());
         StartCoroutine(SpawnFields());
     }
-    
+
 
     public void ChangeState(FieldState newState = FieldState.Neutral)
     {
@@ -62,14 +72,17 @@ public class GameManager : MonoBehaviour
         while (spawning)
         {
             if (maxFields <= CurrentFields.Count) yield return new WaitForSecondsRealtime(2f);
-            CurrentFields.Add(Instantiate(badFieldObject, RandomPosition(), Quaternion.identity));
+            
+            CurrentFields.Add(Instantiate(fieldObjects[Random.Range(1,3)], RandomPosition(), Quaternion.identity));
+            
+            
             yield return new WaitForSecondsRealtime(1f);
         }
     }
     
     private IEnumerator GatherScore()
     {
-        while (_playing)
+        while (Playing)
         {
 
             var waitTime = defaultScoreTime;
@@ -97,8 +110,10 @@ public class GameManager : MonoBehaviour
                 case FieldState.Neutral:
                     _score++;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case FieldState.Death:
+                    yield return 0;
+                    break;
+                    
             }
 
             scoreText.text = "Score: " + _score;
@@ -113,11 +128,23 @@ public class GameManager : MonoBehaviour
             y = Random.Range(_minBounds.y, _maxBounds.y)
         };
     }
+
+    public IEnumerator Endgame()
+    {
+        PlayerMovement.Instance.Die();
+        Playing = false;
+        Time.timeScale = 0;
+        
+        yield return new WaitForSecondsRealtime(1f);
+        
+        // open UI
+    }   
 }
 
 public enum FieldState
 {
     Good,
     Neutral,
-    Bad
+    Bad,
+    Death
 }

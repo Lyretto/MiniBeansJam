@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +10,20 @@ public class Field : MonoBehaviour
     [SerializeField] private float maxSize = 5f;
     [SerializeField] private float growTime = 1f;
     [SerializeField] private float dyingTime = 1f;
+    [SerializeField] private float waitingTime = 1f;
     
     private float _sizeModificator;
     private bool _hasPlayer;
     public List<GameObject> touchingFields;
+    private SpriteRenderer _spriteRenderer;
+    private Sprite _defaultSprite;
+    [SerializeField] private Sprite waitingSprite;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _defaultSprite = _spriteRenderer.sprite;
+    }
 
     private void Start()
     {
@@ -21,6 +32,8 @@ public class Field : MonoBehaviour
 
     private IEnumerator Grow()
     {
+        StartCoroutine(SpawnSignaling());
+        
         var elapsedTime = 0f;
         var maxScale = new Vector3(maxSize, maxSize, maxSize);
         var startScale = transform.localScale;
@@ -30,16 +43,22 @@ public class Field : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        
         StartCoroutine(Dying());
+    }
+
+    private IEnumerator SpawnSignaling()
+    {
+        _spriteRenderer.sprite = waitingSprite;
+        yield return new WaitForSecondsRealtime(dyingTime);
+        _spriteRenderer.sprite = _defaultSprite;
     }
 
     private IEnumerator Dying()
     {
         yield return new WaitForSecondsRealtime(dyingTime);
+        GameManager.Instance.CurrentFields.Remove(gameObject);
         if(_hasPlayer)  GameManager.Instance.ChangeState();
         touchingFields.ForEach(field => field.GetComponent<Field>().touchingFields.Remove(gameObject));
-        GameManager.Instance.CurrentFields.Remove(gameObject);
         Destroy(gameObject);
     }
     
@@ -48,6 +67,8 @@ public class Field : MonoBehaviour
        
         if (other.CompareTag("Player"))
         {
+            if(fieldState == FieldState.Death) StartCoroutine(GameManager.Instance.Endgame());
+            
             _hasPlayer = true;
             GameManager.Instance.ChangeState(fieldState);
         }
