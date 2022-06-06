@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406b49175c2c2aa4babf722d2737d99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultScoreTime: 1
+  defaultScoreTime: 0.2
   badFieldScoreTime: 0.5
   goodFieldScoreTime: 0.5
   spawnFieldCooldown: 0.5
