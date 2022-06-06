@@ -10,6 +10,7 @@ public class Field : MonoBehaviour
     [SerializeField] private float dyingTime = 1f;
     [SerializeField] private float waitingTime = 1f;
     [SerializeField] public float stickyModifier = 1f;
+    [SerializeField] public int scoreModifier = 1;
     
     private float _sizeModificator;
     private bool _hasPlayer;
@@ -18,6 +19,7 @@ public class Field : MonoBehaviour
     private Sprite _defaultSprite;
     private CircleCollider2D _collider;
     [SerializeField] private Sprite waitingSprite;
+    private bool _waiting;
 
     private void Awake()
     {
@@ -44,16 +46,30 @@ public class Field : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        
+        yield return new WaitUntil(() => !_waiting);
+        
         StartCoroutine(Dying());
     }
 
     private IEnumerator SpawnSignaling()
     {
-        _collider.enabled = false;
+        _waiting = true;
         _spriteRenderer.sprite = waitingSprite;
         yield return new WaitForSecondsRealtime(waitingTime);
         _spriteRenderer.sprite = _defaultSprite;
-        _collider.enabled = true;
+
+        var mask = new ContactFilter2D
+        {
+            layerMask = LayerMask.NameToLayer("Player")
+        };
+        
+        if (Physics2D.OverlapCollider(_collider, mask, new List<Collider2D>()) > 0)
+        {
+            PlayerEntered();
+        }
+        
+        _waiting = false;
     }
 
     private IEnumerator Dying()
@@ -72,26 +88,30 @@ public class Field : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-       
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !_waiting)
         {
-            if(fieldState == FieldState.Death) GameManager.Instance.EndGame();
-            
-            PlayerMovement.Instance.touchingFields.Add(this);
-            
-            _hasPlayer = true;
-            GameManager.Instance?.ChangeState(fieldState);
+            PlayerEntered();
         }
         if(other.CompareTag("Field")) touchingFields.Add(other.gameObject);
         
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && !_waiting)
         {
             PlayerMovement.Instance.touchingFields.Remove(this);
             _hasPlayer = false;
             GameManager.Instance?.ChangeState();
         }
+    }
+
+    private void PlayerEntered()
+    {
+        if(fieldState == FieldState.Death) GameManager.Instance.EndGame();
+            
+        PlayerMovement.Instance.touchingFields.Add(this);
+            
+        _hasPlayer = true;
+        GameManager.Instance?.ChangeState(fieldState);
     }
 }
