@@ -46,6 +46,8 @@ public class Field : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        dyingTime += growTime - elapsedTime;
         
         yield return new WaitUntil(() => !_waiting);
         
