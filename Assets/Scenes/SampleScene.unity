@@ -572,8 +572,8 @@ MonoBehaviour:
   defaultScoreTime: 0.2
   badFieldScoreTime: 0.5
   goodFieldScoreTime: 0.5
-  spawnFieldCooldown: 0.5
-  maxFields: 15
+  spawnFieldCooldown: 0.1
+  maxFields: 25
   fieldObjects:
   - {fileID: 8570908579464122163, guid: 657c39fe61f487b4fa65c31b7052dd0d, type: 3}
   - {fileID: 1060586382588595869, guid: 615d09f9d4a27bd48aa1c563fd46b439, type: 3}
