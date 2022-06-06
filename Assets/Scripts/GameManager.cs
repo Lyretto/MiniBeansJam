@@ -104,10 +104,10 @@ public class GameManager : MonoBehaviour
             switch (_fieldState)
             {
                 case FieldState.Bad:
-                    waitTime -= badFieldScoreTime;
+                    waitTime = badFieldScoreTime;
                     break;
                 case FieldState.Good:
-                    waitTime -= goodFieldScoreTime;
+                    waitTime = goodFieldScoreTime;
                     break;
             }
 
