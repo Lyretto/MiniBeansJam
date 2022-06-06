@@ -13,11 +13,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: growTime
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: dyingTime
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: fieldState
@@ -25,11 +25,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: waitingTime
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: stickyModifier
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589235, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Name
