@@ -8,8 +8,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: maxSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: growTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: dyingTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: fieldState
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: stickyModifier
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589235, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Name
@@ -17,15 +33,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589238, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Color.b
-      value: 0.39720228
+      value: 0.5622396
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589238, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Color.g
-      value: 0.9245283
+      value: 0.8584906
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589238, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Color.r
-      value: 0.15263437
+      value: 0.20652366
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589239, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_RootOrder
