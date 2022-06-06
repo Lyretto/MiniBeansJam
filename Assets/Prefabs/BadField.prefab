@@ -16,6 +16,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: scoreModifier
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: stickyModifier
       value: 0.3
       objectReference: {fileID: 0}
@@ -25,7 +29,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589235, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Field
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589238, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_Color.b
@@ -45,11 +49,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589239, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.424
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589239, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.277
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589239, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: m_LocalPosition.z

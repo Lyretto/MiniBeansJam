@@ -1,24 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int goodFieldScoreMultiplier = 5;
-    [SerializeField] private int badFieldScoreMultiplier = -2;
     [SerializeField] private float defaultScoreTime = 1f;
     [SerializeField] private float badFieldScoreTime = .5f;
     [SerializeField] private float goodFieldScoreTime = .5f;
     [SerializeField] private float spawnFieldCooldown = .5f;
     [SerializeField] private int maxFields = 2;
-    
-    
-
     [SerializeField] private List<GameObject> fieldObjects;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text endScoreText;
@@ -80,8 +75,18 @@ public class GameManager : MonoBehaviour
         while (spawning)
         {
             if (maxFields <= CurrentFields.Count) yield return new WaitForSecondsRealtime(2f);
+
+            var randomPos = RandomPosition();
+
+            var colliders2D = Physics2D.OverlapCircleAll(randomPos, .5f);
+
+            if (colliders2D.Length > 0)
+            {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
             
-            CurrentFields.Add(Instantiate(fieldObjects[Random.Range(0,3)], RandomPosition(), Quaternion.identity));
+            CurrentFields.Add(Instantiate(fieldObjects[Random.Range(0,3)], randomPos, Quaternion.identity));
             
             
             yield return new WaitForSecondsRealtime(spawnFieldCooldown);
@@ -107,28 +112,13 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(waitTime);
 
-            switch (_fieldState)
-            {
-                case FieldState.Bad:
-                    _score += badFieldScoreMultiplier;
-                    break;
-                case FieldState.Good:
-                    _score += goodFieldScoreMultiplier;
-                    break;
-                case FieldState.Neutral:
-                    
-                    break;
-                case FieldState.Death:
-                    yield return 0;
-                    break;
-                    
-            }
+            if(PlayerMovement.Instance.touchingFields.Count > 0) _score += (int) PlayerMovement.Instance.touchingFields.Average(f => f.GetComponent<Field>().scoreModifier);
 
             scoreText.text = "Score: " + _score;
         }
     }
     
-    private Vector2 RandomPosition()
+    private static Vector2 RandomPosition()
     {
         return new Vector2
         {
