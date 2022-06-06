@@ -569,8 +569,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406b49175c2c2aa4babf722d2737d99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goodFieldScoreMultiplier: 3
-  badFieldScoreMultiplier: -2
   defaultScoreTime: 1
   badFieldScoreTime: 0.5
   goodFieldScoreTime: 0.5
@@ -583,6 +581,7 @@ MonoBehaviour:
   scoreText: {fileID: 322495721}
   endScoreText: {fileID: 914098531}
   endUI: {fileID: 1710803405}
+  scorePopup: {fileID: 3338734529434534141, guid: cb6df96e238156f49ac015f6ba60cce1, type: 3}
   spawning: 1
 --- !u!4 &1818842459
 Transform:
