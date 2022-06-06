@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -24,8 +25,12 @@ public class PlayerMovement : MonoBehaviour
     
     private void Awake() => _animator = GetComponentInChildren<Animator>();
     
-    public void Die() => _animator.SetTrigger(Death);
-    
+    public void Die()
+    {
+        _animator.speed = 1f;
+        _animator.SetTrigger(Death);
+    }
+
 
     void Update ()
     {
@@ -46,12 +51,19 @@ public class PlayerMovement : MonoBehaviour
             if (distance < moveSpeed/10f) distance = 1;
 
             var modifier = touchingFields.Count > 0 ? touchingFields.Average(field => field.stickyModifier) : 1f;
-            
+
+
+            _animator.speed = modifier;
             
             transform.position = Vector2.Lerp(transform.position, mousePosition,  modifier * moveSpeed * Time.deltaTime/distance);
                 
             Vector2 direction = mousePosition - transform.position;
-            float angle = Vector2.SignedAngle(Vector2.right, direction);
-            transform.eulerAngles = new Vector3 (0, 0, angle + 90);
+
+            var angle = Vector2.SignedAngle(Vector2.right, direction) + 90;
+            
+            
+            
+            transform.eulerAngles = new Vector3 (0, 0, Mathf.LerpAngle(transform.eulerAngles.z, angle, moveSpeed * Time.deltaTime/distance));
+            
     }
 }

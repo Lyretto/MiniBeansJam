@@ -9,7 +9,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: maxSize
-      value: 15
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: growTime
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: dyingTime
