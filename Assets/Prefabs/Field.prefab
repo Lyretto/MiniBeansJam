@@ -118,7 +118,10 @@ MonoBehaviour:
   fieldState: 1
   maxSize: 5
   growTime: 10
+  dyingTime: 1
+  waitingTime: 1
   touchingFields: []
+  waitingSprite: {fileID: 21300000, guid: 3128d59fd80decd409ce5364d8f7c298, type: 3}
 --- !u!50 &2546279331397919856
 Rigidbody2D:
   serializedVersion: 4

@@ -1,14 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Vector3 mousePosition;
     public float moveSpeed = 0.1f;
     private Animator _animator;
     public List<Field> touchingFields;
 
     private static PlayerMovement _instance;
+    private static readonly int Speed = Animator.StringToHash("Speed");
+    private static readonly int Death = Animator.StringToHash("Death");
+
     public static PlayerMovement Instance
     {
         get
@@ -19,38 +22,36 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-    private void Awake()
-    {
-        _animator = GetComponentInChildren<Animator>();
-    }
-
-    public void Die()
-    {
-        _animator.SetTrigger("Death");
-    }
+    private void Awake() => _animator = GetComponentInChildren<Animator>();
+    
+    public void Die() => _animator.SetTrigger(Death);
+    
 
     void Update ()
     {
-        if (!GameManager.Instance.Playing) return;
+        if (!GameManager.Instance?.Playing ?? false) return;
         
-            mousePosition = Input.mousePosition;
+            var mousePosition = Input.mousePosition;
             mousePosition = Camera.main!.ScreenToWorldPoint(mousePosition);
             
-            _animator.SetFloat("Speed", Vector3.Distance(transform.position,mousePosition));
+            if(GameManager.Instance){ 
+                mousePosition = new Vector2(Mathf.Clamp(mousePosition.x, WorldBounds.Instance.MINBounds.x,WorldBounds.Instance.MAXBounds.x),
+                Mathf.Clamp(mousePosition.y, WorldBounds.Instance.MINBounds.y,WorldBounds.Instance.MAXBounds.y) );
+            }
 
-            var modifier = touchingFields.Count <= 0 ? 1f : .5f;
+            var distance = Vector2.Distance(transform.position, mousePosition);
             
-            transform.position = Vector2.Lerp(transform.position, mousePosition,  modifier * moveSpeed * Time.deltaTime);
-                
-            // mousePosition.Normalize();
-            // var rotZ = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
-            // transform.rotation = Quaternion.Euler(0f, 0f, rotZ - 90);
+            _animator.SetFloat(Speed, distance);
 
+            if (distance < moveSpeed/10f) distance = 1;
+
+            var modifier = touchingFields.Count > 0 ? touchingFields.Average(field => field.stickyModifier) : 1f;
+            
+            
+            transform.position = Vector2.Lerp(transform.position, mousePosition,  modifier * moveSpeed * Time.deltaTime/distance);
+                
             Vector2 direction = mousePosition - transform.position;
             float angle = Vector2.SignedAngle(Vector2.right, direction);
             transform.eulerAngles = new Vector3 (0, 0, angle + 90);
-
-            // transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, 0, (angle + 90)%360f),
-            //     moveSpeed * Time.deltaTime);
     }
 }

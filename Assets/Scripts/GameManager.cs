@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float defaultScoreTime = 1f;
     [SerializeField] private float badFieldScoreTime = .5f;
     [SerializeField] private float goodFieldScoreTime = .5f;
+    [SerializeField] private float spawnFieldCooldown = .5f;
     [SerializeField] private int maxFields = 2;
     
     
@@ -26,8 +28,6 @@ public class GameManager : MonoBehaviour
     private int _score;
     private FieldState _fieldState = FieldState.Neutral;
     [NonSerialized] public bool Playing = true;
-    private Vector2 _maxBounds;
-    private Vector2 _minBounds;
     public bool spawning = true;
     [NonSerialized] public List<GameObject> CurrentFields = new ();
 
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    public void StartGame()
+    private void StartGame()
     {
         endUI.SetActive(false);
         Playing = true;
@@ -57,8 +57,16 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         StartCoroutine(GatherScore());
         StartCoroutine(SpawnFields());
+        StartCoroutine(StartInEasyMode(5f));
     }
 
+    private IEnumerator StartInEasyMode(float delay)
+    {
+        var cooldown = spawnFieldCooldown;
+        spawnFieldCooldown = 2f;
+        yield return new WaitForSecondsRealtime(delay);
+        spawnFieldCooldown = cooldown;
+    }
 
     public void ChangeState(FieldState newState = FieldState.Neutral)
     {
@@ -67,22 +75,16 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SpawnFields()
     {
-        var vertExtent = Camera.main!.orthographicSize;
-        var horzExtent = vertExtent * Screen.width / Screen.height;
-        
-        _maxBounds = new Vector2(horzExtent / 2f, vertExtent / 2 );
-        _minBounds = new Vector2(-horzExtent / 2f, -vertExtent / 2);
-
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(spawnFieldCooldown);
         
         while (spawning)
         {
             if (maxFields <= CurrentFields.Count) yield return new WaitForSecondsRealtime(2f);
             
-            CurrentFields.Add(Instantiate(fieldObjects[Random.Range(1,3)], RandomPosition(), Quaternion.identity));
+            CurrentFields.Add(Instantiate(fieldObjects[Random.Range(0,3)], RandomPosition(), Quaternion.identity));
             
             
-            yield return new WaitForSecondsRealtime(1f);
+            yield return new WaitForSecondsRealtime(spawnFieldCooldown);
         }
     }
     
@@ -114,7 +116,7 @@ public class GameManager : MonoBehaviour
                     _score += goodFieldScoreMultiplier;
                     break;
                 case FieldState.Neutral:
-                    _score++;
+                    
                     break;
                 case FieldState.Death:
                     yield return 0;
@@ -130,22 +132,28 @@ public class GameManager : MonoBehaviour
     {
         return new Vector2
         {
-            x = Random.Range(_minBounds.x, _maxBounds.x),
-            y = Random.Range(_minBounds.y, _maxBounds.y)
+            x = Random.Range(WorldBounds.Instance.MINBounds.x, WorldBounds.Instance.MAXBounds.x),
+            y = Random.Range(WorldBounds.Instance.MINBounds.y, WorldBounds.Instance.MAXBounds.y)
         };
     }
 
-    public IEnumerator Endgame()
+    public void EndGame()
     {
         PlayerMovement.Instance.Die();
+        StopAllCoroutines();
         Playing = false;
+        StartCoroutine(EndScreen(0.6f));
+    }
+    
+    private IEnumerator EndScreen(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
         Time.timeScale = 0;
-        
-        yield return new WaitForSecondsRealtime(1f);
-        
         endUI.SetActive(true);
         endScoreText.text = _score.ToString();
-    }   
+    }
+
+    public void Restart() => SceneManager.LoadScene("SampleScene");
 }
 
 public enum FieldState

@@ -9,6 +9,7 @@ public class Field : MonoBehaviour
     [SerializeField] private float growTime = 1f;
     [SerializeField] private float dyingTime = 1f;
     [SerializeField] private float waitingTime = 1f;
+    [SerializeField] public float stickyModifier = 1f;
     
     private float _sizeModificator;
     private bool _hasPlayer;
@@ -21,6 +22,7 @@ public class Field : MonoBehaviour
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _collider = GetComponent<CircleCollider2D>();
         _defaultSprite = _spriteRenderer.sprite;
     }
 
@@ -49,7 +51,7 @@ public class Field : MonoBehaviour
     {
         _collider.enabled = false;
         _spriteRenderer.sprite = waitingSprite;
-        yield return new WaitForSecondsRealtime(dyingTime);
+        yield return new WaitForSecondsRealtime(waitingTime);
         _spriteRenderer.sprite = _defaultSprite;
         _collider.enabled = true;
     }
@@ -57,9 +59,13 @@ public class Field : MonoBehaviour
     private IEnumerator Dying()
     {
         yield return new WaitForSecondsRealtime(dyingTime);
-        GameManager.Instance.CurrentFields.Remove(gameObject);
+        GameManager.Instance?.CurrentFields.Remove(gameObject);
         if(_hasPlayer)  GameManager.Instance.ChangeState();
-        touchingFields.ForEach(field => field.GetComponent<Field>().touchingFields.Remove(gameObject));
+        touchingFields.ForEach(field =>
+        {
+            if(field && gameObject)
+                field.GetComponent<Field>().touchingFields.Remove(gameObject);
+        });
         PlayerMovement.Instance.touchingFields.Remove(this);
         Destroy(gameObject);
     }
@@ -69,12 +75,12 @@ public class Field : MonoBehaviour
        
         if (other.CompareTag("Player"))
         {
-            if(fieldState == FieldState.Death) StartCoroutine(GameManager.Instance.Endgame());
+            if(fieldState == FieldState.Death) GameManager.Instance.EndGame();
             
             PlayerMovement.Instance.touchingFields.Add(this);
             
             _hasPlayer = true;
-            GameManager.Instance.ChangeState(fieldState);
+            GameManager.Instance?.ChangeState(fieldState);
         }
         if(other.CompareTag("Field")) touchingFields.Add(other.gameObject);
         
@@ -85,7 +91,7 @@ public class Field : MonoBehaviour
         {
             PlayerMovement.Instance.touchingFields.Remove(this);
             _hasPlayer = false;
-            GameManager.Instance.ChangeState();
+            GameManager.Instance?.ChangeState();
         }
     }
 }

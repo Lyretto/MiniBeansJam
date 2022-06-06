@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -409,6 +410,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb200c93038a9040888ebc10e653248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &914098531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5185333192916451713, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+  m_PrefabInstance: {fileID: 976518395087382830}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &974434802
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,6 +535,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1710803405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8587369848320208409, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+  m_PrefabInstance: {fileID: 976518395087382830}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1818842457
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,17 +569,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406b49175c2c2aa4babf722d2737d99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goodFieldScoreMultiplier: 5
+  goodFieldScoreMultiplier: 3
   badFieldScoreMultiplier: -2
   defaultScoreTime: 1
   badFieldScoreTime: 0.5
   goodFieldScoreTime: 0.5
-  maxFields: 3
+  spawnFieldCooldown: 0.5
+  maxFields: 15
   fieldObjects:
   - {fileID: 8570908579464122163, guid: 657c39fe61f487b4fa65c31b7052dd0d, type: 3}
   - {fileID: 1060586382588595869, guid: 615d09f9d4a27bd48aa1c563fd46b439, type: 3}
   - {fileID: 6944666005104070579, guid: a7ec7f2f50b194a40a5520b2a2f6e16c, type: 3}
   scoreText: {fileID: 322495721}
+  endScoreText: {fileID: 914098531}
+  endUI: {fileID: 1710803405}
   spawning: 1
 --- !u!4 &1818842459
 Transform:
@@ -579,6 +611,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 974434806}
     m_Modifications:
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1818842458}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 153397367, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5835540911178626275, guid: dc9b6e871dcb1a1408ea3649389990a8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
