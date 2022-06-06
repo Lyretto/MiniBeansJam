@@ -9,11 +9,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: maxSize
-      value: 9
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: dyingTime
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: fieldState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
+      propertyPath: waitingTime
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2807859711610589232, guid: 849f43b29dcd67a4db03ff5866efe935, type: 3}
       propertyPath: scoreModifier
