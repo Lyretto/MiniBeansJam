@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text endScoreText;
     [SerializeField] private GameObject endUI;
+    [SerializeField] private GameObject scorePopup;
 
     
     private int _score;
@@ -112,7 +113,13 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(waitTime);
 
-            if(PlayerMovement.Instance.touchingFields.Count > 0) _score += (int) PlayerMovement.Instance.touchingFields.Average(f => f.GetComponent<Field>().scoreModifier);
+            if (PlayerMovement.Instance.touchingFields.Count > 0)
+            {
+                var gatheredCoins =
+                    (int) PlayerMovement.Instance.touchingFields.Average(f => f.GetComponent<Field>().scoreModifier);
+                _score += gatheredCoins;
+                ScorePopup.Create(scorePopup, PlayerMovement.Instance.transform.position, gatheredCoins);
+            }
 
             scoreText.text = "Score: " + _score;
         }
